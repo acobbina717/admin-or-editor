@@ -1,7 +1,7 @@
-import Auth from "@/components/auth/Auth";
+import LandingPage from "@/components/LandingPage";
 
 export const Home = () => {
-  return <Auth />;
+  return <LandingPage />;
 };
 
 export default Home;

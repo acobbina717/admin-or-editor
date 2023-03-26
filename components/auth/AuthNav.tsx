@@ -1,33 +1,14 @@
-import { Box, styled, Tab } from "@mui/material";
-import React from "react";
+import { Box } from "@mui/material";
+import { SyntheticEvent, useState } from "react";
 import AuthFrom from "./AuthFrom";
 import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
-
-interface StyledTabProps {
-  label: string;
-  value: string;
-}
-
-const AuthTab = styled((props: StyledTabProps) => (
-  <Tab disableRipple {...props} />
-))(({ theme }) => ({
-  textTransform: "none",
-  minWidth: 0,
-  fontWeight: theme.typography.fontWeightRegular,
-  marginRight: theme.spacing(1),
-  color: "rgba(0, 0, 0, 0.85)",
-
-  "&.Mui-selected": {
-    color: "#1890ff",
-    fontWeight: theme.typography.fontWeightMedium,
-  },
-}));
+import { AuthTab } from "./AuthTab";
 
 const AuthNav = () => {
-  const [value, setValue] = React.useState("1");
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const [value, setValue] = useState("1");
+  const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
   return (

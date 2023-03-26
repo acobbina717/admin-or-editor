@@ -60,7 +60,7 @@ const AuthFrom = ({ mode }: AuthFromProps) => {
       callbackUrl: `${window.location.origin}`,
     });
 
-    result?.error ? console.log(result.error) : router.push("/landingpage");
+    result?.error ? console.log(result.error) : router.push("/");
   };
 
   return (

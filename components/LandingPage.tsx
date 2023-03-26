@@ -1,7 +1,8 @@
-import ColumnGroupingTable from "@/components/UsersTable";
 import { Box, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import UsersTable from "@/components/UsersTable";
+import { useRouter } from "next/router";
 
 interface User {
   email: string;
@@ -12,7 +13,8 @@ interface User {
   roles: [];
 }
 
-const Page = () => {
+const LandingPage = () => {
+  const router = useRouter();
   const { data: session, status } = useSession();
 
   const user = session?.user as User;
@@ -22,10 +24,14 @@ const Page = () => {
   }
 
   const handleSignOut = async () => {
-    await signOut({
+    const result = await signOut({
       redirect: false,
-      callbackUrl: `${window.location.origin}`,
     });
+
+    if (result) {
+      router.push("/auth");
+      return;
+    }
   };
 
   return (
@@ -46,10 +52,10 @@ const Page = () => {
         </Typography>
       </Stack>
       <Box pt={2} pb={2}>
-        <ColumnGroupingTable />
+        <UsersTable />
       </Box>
     </Box>
   );
 };
 
-export default Page;
+export default LandingPage;

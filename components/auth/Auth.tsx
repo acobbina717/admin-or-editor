@@ -1,7 +1,6 @@
-import React from "react";
 import { Box, Card, Container, Stack, Typography } from "@mui/material";
 import Image from "next/image";
-import AuthNav from "./AuthNav";
+import AuthNav from "../../components/auth/AuthNav";
 
 const Auth = () => {
   return (
