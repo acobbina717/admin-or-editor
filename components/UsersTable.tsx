@@ -8,38 +8,65 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { v4 as uuidv4 } from "uuid";
+import Permission, { allowedRoles } from "./Permission";
+import { useSession } from "next-auth/react";
+import { User } from "./LandingPage";
+import { usersData } from "@/prisma/usersData";
 
 interface Column {
   id: "user" | "role";
-  label: string;
+  label?: string;
   width?: string;
   format?: (value: number) => string;
 }
 
-const columns: Column[] = [
-  { id: "user", label: "Users", width: "30%" },
-  { id: "role", label: "Role" },
-];
-
 interface Data {
   user: string;
-  role: string;
+  role?: string;
 }
 
-function createData(user: string, role: string): Data {
+function createData(user: string, role?: string): Data {
+  if (!role) {
+    return { user };
+  }
   return { user, role };
 }
 
-const rows = [
-  createData("Timmy Xie", "Editor"),
-  createData("Jeremy Chu", "Editor"),
-  createData("Huisheng Xie", "Admin"),
-  createData("Yanru Zhao", "Admin"),
-];
+const createRows = (user, roles: allowedRoles[]) => {
+  // const userName = [user.firstName, user.lastName].join(" ");
+
+  if (user.roles.find((role) => roles.includes(role))) {
+    const columns: Column[] = [
+      { id: "user", label: "Users", width: "30%" },
+      { id: "role", label: "Roles" },
+    ];
+    const rows = [
+      createData("Timmy Xie", "Editor"),
+      createData("Jeremy Chu", "Editor"),
+      createData("Huisheng Xie", "Admin"),
+      createData("Yanru Zhao", "Admin"),
+    ];
+    return { rows, columns };
+  } else {
+    const columns: Column[] = [{ id: "user", label: "Users", width: "30%" }];
+    const rows = [
+      createData("Timmy Xie"),
+      createData("Jeremy Chu"),
+      createData("Huisheng Xie"),
+      createData("Yanru Zhao"),
+    ];
+    return { rows, columns };
+  }
+};
 
 export default function UsersTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const { data } = useSession();
+  const user = data?.user;
+
+  const { columns, rows } = createRows(user, ["Admin"]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);

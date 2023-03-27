@@ -3,14 +3,15 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import UsersTable from "@/components/UsersTable";
 import { useRouter } from "next/router";
+import { allowedRoles } from "./Permission";
 
-interface User {
+export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  id: string;
-  image: string | null;
-  roles: [];
+  id?: string;
+  image?: string;
+  roles: allowedRoles[];
 }
 
 const LandingPage = () => {
