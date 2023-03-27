@@ -8,10 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { v4 as uuidv4 } from "uuid";
-import Permission, { allowedRoles } from "./Permission";
+import { allowedRoles } from "./Permission";
 import { useSession } from "next-auth/react";
-import { User } from "./LandingPage";
 import { usersData } from "@/prisma/usersData";
+import { User } from "./LandingPage";
 
 interface Column {
   id: "user" | "role";
@@ -32,29 +32,29 @@ function createData(user: string, role?: string): Data {
   return { user, role };
 }
 
-const createRows = (user, roles: allowedRoles[]) => {
-  // const userName = [user.firstName, user.lastName].join(" ");
-
+const createRows = (user: User, roles: allowedRoles[]) => {
   if (user.roles.find((role) => roles.includes(role))) {
     const columns: Column[] = [
       { id: "user", label: "Users", width: "30%" },
       { id: "role", label: "Roles" },
     ];
-    const rows = [
-      createData("Timmy Xie", "Editor"),
-      createData("Jeremy Chu", "Editor"),
-      createData("Huisheng Xie", "Admin"),
-      createData("Yanru Zhao", "Admin"),
-    ];
+
+    const rows = usersData.map((user) => {
+      const userName = [user.firstName, user.lastName].join(" ");
+      const rowData = createData(userName, String(user.roles));
+      return rowData;
+    });
+
     return { rows, columns };
   } else {
     const columns: Column[] = [{ id: "user", label: "Users", width: "30%" }];
-    const rows = [
-      createData("Timmy Xie"),
-      createData("Jeremy Chu"),
-      createData("Huisheng Xie"),
-      createData("Yanru Zhao"),
-    ];
+
+    const rows = usersData.map((user) => {
+      const userName = [user.firstName, user.lastName].join(" ");
+      const rowData = createData(userName);
+      return rowData;
+    });
+
     return { rows, columns };
   }
 };
@@ -66,12 +66,9 @@ export default function UsersTable() {
   const { data } = useSession();
   const user = data?.user;
 
-  const { columns, rows } = createRows(user, ["Admin"]);
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -79,6 +76,7 @@ export default function UsersTable() {
     setPage(0);
   };
 
+  const { columns, rows } = createRows(user as User, ["Admin"]);
   return (
     <Paper sx={{ width: "100%" }}>
       <TableContainer sx={{ minHeight: "80vh" }}>
