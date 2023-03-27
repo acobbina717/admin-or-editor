@@ -3,7 +3,8 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import UsersTable from "@/components/UsersTable";
 import { useRouter } from "next/router";
-import { allowedRoles } from "./Permission";
+
+export type allowedRoles = "Admin" | "Editor";
 
 export interface User {
   email: string;

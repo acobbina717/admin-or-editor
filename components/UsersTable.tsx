@@ -8,10 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { v4 as uuidv4 } from "uuid";
-import { allowedRoles } from "./Permission";
+
 import { useSession } from "next-auth/react";
 import { usersData } from "@/prisma/usersData";
-import { User } from "./LandingPage";
+import { allowedRoles, User } from "./LandingPage";
 
 interface Column {
   id: "user" | "role";
